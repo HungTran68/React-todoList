@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import DataList from './DataList';
 
 const TodoList = () => {
     const [todo, setTodo] = useState('');
@@ -21,28 +22,28 @@ const TodoList = () => {
         setTodo('');
     }
 
-    const handleClickDeleteItem = (index) => {
-        let indexBtn = index;
-        console.log(indexBtn);
-        let coppiedList = [...listTodos];
-        let deletedList = coppiedList.filter((value,index) => index !== indexBtn)
-        console.log('1',deletedList);
-        setlistTodos(deletedList);
-    }
+    // const handleClickDeleteItem = (index) => {
+    //     let indexBtn = index;
+    //     console.log(indexBtn);
+    //     let coppiedList = [...listTodos];
+    //     let deletedList = coppiedList.filter((value,index) => index !== indexBtn)
+    //     console.log('1',deletedList);
+    //     setlistTodos(deletedList);
+    // }
 
-    const handleClickEdit = (index) => {
-        let indexEdit = index;
-        let coppiedList = [...listTodos];
-        coppiedList[indexEdit].isEditing = true;
-        coppiedList.forEach((value,index) => {
-            if (value.isEditing == true){
-                setShowFormUpdate(true);
-            }
+    // const handleClickEdit = (index) => {
+    //     let indexEdit = index;
+    //     let coppiedList = [...listTodos];
+    //     coppiedList[indexEdit].isEditing = true;
+    //     coppiedList.forEach((value,index) => {
+    //         if (value.isEditing == true){
+    //             setShowFormUpdate(true);
+    //         }
            
-        })
-        console.log('111',coppiedList);
-        setlistTodos(coppiedList);
-    }
+    //     })
+    //     console.log('111',coppiedList);
+    //     setlistTodos(coppiedList);
+    // }
 
     const handleInputUpdate = (e) => {
         setTodoUpdate(e.target.value)
@@ -59,6 +60,19 @@ const TodoList = () => {
         setShowFormUpdate(false);
     }
 
+    const handleSendListFromDataList = (arrayDeleted) => {
+        setlistTodos(arrayDeleted);
+    }
+
+    const handleSendListEDitedFromDataList = (arrayEditting) => {
+        arrayEditting.forEach((value,index) => {
+            if (value.isEditing == true){
+                setShowFormUpdate(true);
+            }
+        })
+        setlistTodos(arrayEditting);    
+    }
+
 
 
   return (
@@ -69,24 +83,18 @@ const TodoList = () => {
         </>)}
         
         {showFormUpdate && (<div className="form-update">
-            <input onChange={handleInputUpdate}></input>
-            <button onClick={handleClickUpdateTodo}>Update</button>
+            <input placeholder='UPDATE here' onChange={handleInputUpdate} value={todoUpdate}></input>
+            <button onClick={handleClickUpdateTodo}>UPDATE HERE</button>
         </div>)}
         
         <div>
-            List Task : <br/>
-            <ul>
-            {listTodos.map((item,index) => {
-                return (
-                    <li key={index}> {item.nameTodo}
-                     <button onClick={() => handleClickDeleteItem(index)}> Delete</button>
-                     <button onClick = {() => handleClickEdit(index)}>Edit</button>
-                     
-                     
-                     </li>
-                )
-            })}
-            </ul>
+           <DataList
+           listTodos={listTodos}
+           handleSendListFromDataList = {handleSendListFromDataList}
+           handleSendListEDitedFromDataList = {handleSendListEDitedFromDataList}
+           showFormUpdate = {showFormUpdate}
+           
+           />
             
         </div>
     </div>
